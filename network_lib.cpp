@@ -46,7 +46,8 @@ addr_t no_addr;
 bool send_frame(int sock, const addr_t &target, nw_cmd_t cmd, nw_var_t * vars) {
 	char * nw = (char*)malloc(FRAME_SIZE+1);
 	int pos = HASH_SIZE;	
-	uint16_t nwi;
+	uint16_t nwi16;
+	uint32_t nwi32;
 
 	/**
 	 * Select protocol cmd and write cmd to first pos
@@ -65,9 +66,14 @@ bool send_frame(int sock, const addr_t &target, nw_cmd_t cmd, nw_var_t * vars) {
 				pos += ftnw(vars[i].f,nw+pos);
 				break;
 			case NW_VAR_UINT16:
-				nwi = htons(vars[i].i);
-				memcpy(nw+pos,&nwi,sizeof(uint16_t));
+				nwi16 = htons((uint16_t)vars[i].i);
+				memcpy(nw+pos,&nwi16,sizeof(uint16_t));
 				pos += sizeof(uint16_t);
+				break;
+			case NW_VAR_UINT32:
+				nwi32 = htonl(vars[i].i);
+				memcpy(nw+pos,&nwi32,sizeof(uint32_t));
+				pos += sizeof(uint32_t);
 				break;
 			case NW_VAR_CHAR:
 				nw[pos] = vars[i].c;
@@ -100,7 +106,8 @@ frame_t read_frame(int sock, nw_var_t * vars, addr_t * addr) {
 	network_data_t nw;
 	if(get_frame(sock,&nw)) {
 		int pos = 0;
-		uint16_t nwi;
+		uint16_t nwi16;
+		uint32_t nwi32;
 		int cmd;
 
 		//Read protocol cmd:
@@ -121,9 +128,14 @@ frame_t read_frame(int sock, nw_var_t * vars, addr_t * addr) {
 					pos += nwtf((char*)nw.data+pos, &vars[i].f);
 					break;
 				case NW_VAR_UINT16:
-					memcpy(&nwi, (char*)nw.data+pos,sizeof(uint16_t));
-					vars[i].i = ntohs(nwi);
+					memcpy(&nwi16, (char*)nw.data+pos,sizeof(uint16_t));
+					vars[i].i = (uint32_t)ntohs(nwi16);
 					pos += sizeof(uint16_t);
+					break;
+				case NW_VAR_UINT32:
+					memcpy(&nwi32, (char*)nw.data+pos,sizeof(uint32_t));
+					vars[i].i = ntohl(nwi32);
+					pos += sizeof(uint32_t);
 					break;
 				case NW_VAR_CHAR:
 					vars[i].c = ((char*)nw.data)[pos];
@@ -135,7 +147,9 @@ frame_t read_frame(int sock, nw_var_t * vars, addr_t * addr) {
 			}
 		}
 
-		*addr = nw.addr;
+		if(addr != NULL) {
+			*addr = nw.addr;
+		}
 		frame_t f = {(nw_cmd_t)cmd, num_vars, {}};
 		memcpy(f.var_types,var_types,num_vars*sizeof(nw_var_type_t));
 		return f;
@@ -266,12 +280,14 @@ void test_network() {
 	printf("Setting up broadcast test on port 4711\n");
 	int sock1 = create_udp_socket(4711, true);
 	int sock2 = create_udp_socket(4711, true);
-	nw_var_t vars[4];
+	nw_var_t vars[5];
+	nw_var_t vars_r[5];
 	vars[0].i = 17;
 	vars[1].f = 13.371;
 	vars[2].c = 'z';
+	vars[3].i = (uint32_t)4000000000;
 
-	vars[3].set_str("hailol");
+	vars[4].set_str("hailol");
 	send_frame(sock1, broadcast_addr(4711), NW_CMD_TEST, vars);
 	printf("Waiting\n");
 	count=0;
@@ -284,10 +300,8 @@ void test_network() {
 		usleep(100);
 	}
 	printf("\n");
-	for(int i =0;i<4;++i) 
-		vars[i] = nw_var_t();
 	addr_t addr;
-	frame_t f = read_frame(sock2, vars, &addr);
+	frame_t f = read_frame(sock2, vars_r, &addr);
 	if(f.cmd == NW_CMD_INVALID) {
 		printf("Invalid package recived\n");
 	} else {
@@ -297,7 +311,7 @@ void test_network() {
 			printf("Recived wrong package:\n");
 		f.print(vars);
 	}
-	printf("%s\n", vars[3].str);
+	printf("%s\n", vars[4].str);
 	close_socket(sock1);
 	close_socket(sock2);
 }

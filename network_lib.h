@@ -10,7 +10,7 @@
  */
 struct nw_var_t {
 	float f;
-	uint16_t i;
+	uint32_t i;
 	char c;
 	char * str;
 
