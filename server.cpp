@@ -53,7 +53,7 @@ void sigterm(int sig) {
 void run_server(int network_port, int verbose_flag) {
 	verbose = verbose_flag;
 
-	signal(SIGTERM, &sigterm);
+	signal(SIGINT, &sigterm);
 
 	vars = new nw_var_t[PAYLOAD_SIZE-1]; //Can't be more that this many vars
 

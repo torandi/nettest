@@ -33,12 +33,13 @@ void sigterm_client(int sig) {
 void run_client(std::string server, int port, int verbose_flag) {
 	verbose = verbose_flag;	
 
-	signal(SIGTERM, &sigterm_client);
+	signal(SIGINT, &sigterm_client);
 	vars = new nw_var_t[PAYLOAD_SIZE-1]; //Can't be more that this many vars
 
 	sck = create_tcp_client(server.c_str(), port);
 
 	if(sck != -1) {
+		printf("Client ready\n");
 		while(run) {
 			read();
 		}
