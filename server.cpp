@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <ctime>
 #include <vector>
+#include <signal.h>
 
 #include "server.h"
 #include "protocol.h"
@@ -45,8 +46,14 @@ int active_clients;
 
 test_result_t * test_results;
 
+void sigterm(int sig) {
+	run = 0;
+}
+
 void run_server(int network_port, int verbose_flag) {
 	verbose = verbose_flag;
+
+	signal(SIGTERM, &sigterm);
 
 	vars = new nw_var_t[PAYLOAD_SIZE-1]; //Can't be more that this many vars
 

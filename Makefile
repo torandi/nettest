@@ -1,6 +1,6 @@
 OBJS = sha1.o network_lib.o socket.o protocol.o server.o main.o client.o
-CFLAGS += -Wall -g 
-LDFLAGS += -lpthread
+CFLAGS += -Wall -g  `curl-config --cflags`
+LDFLAGS += -lpthread `curl-config --libs`
 
 all: nettest
  

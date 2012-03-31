@@ -17,7 +17,7 @@ frame_t protocol[] = {
 	{NW_CMD_START_RECV_READY, 0, { }}, //Ready to recive
 	{NW_CMD_SEND_DONE, 0, {}}, //Tell the other part we are done sending
 	{NW_CMD_RESULT, 2, {NW_VAR_UINT16, NW_VAR_UINT16}}, //arg: num packets recived
-	{NW_CMD_DOWNLOAD, 1, {NW_VAR_CHAR}}, //arg: file to downoald
+	{NW_CMD_DOWNLOAD, 1, {NW_VAR_UINT16}}, //arg: file to downoald
 		{NW_CMD_DOWNLOAD_COMPLETE, 2, {NW_VAR_UINT32,NW_VAR_UINT32}}, //speed, fs
 	{NW_CMD_ERROR, 1, { NW_VAR_STR} }
 };

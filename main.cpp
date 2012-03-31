@@ -12,7 +12,7 @@ void show_usage() {
 }
 
 int main(int argc, char* argv[]){
-	int verbose_flag, network_port=PORT, client=0, server=0, replier=0;
+	int verbose_flag=0, network_port=PORT, client=0, server=0, replier=0;
 	std::string master_hostname;
 	static struct option long_options[] =
 	{
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 	int option_index = 0;
 	int c;
 
-	while( (c=getopt_long(argc, argv, "p:hvcsr", long_options, &option_index)) != -1 ) {
+	while( (c=getopt_long(argc, argv, "p:hcsrv", long_options, &option_index)) != -1 ) {
 	 switch(c) {
 		 case 0:
 			 break;
