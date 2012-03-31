@@ -109,6 +109,11 @@ void *input_handler(void * data) {
 				help();
 			} else if(strncmp(cmd, "exit", 4) == 0) {
 				run = 0;
+			} else if(strncmp(cmd, "clients", 7) == 0) {
+				printf("Connected clients:\n");
+				for(std::vector<int>::iterator it = clients.begin(); it<clients.end(); ++it) {
+					printf("%s\n", getpeer(*it).c_str());
+				}
 			} else if(r == -1) {
 				printf("exit\n");
 				run = 0;
@@ -123,6 +128,7 @@ void *input_handler(void * data) {
 void help() {
 	printf("Help:\n");
 	printf("tcp n: Run tcp n\n");
+	printf("clients: List clients\n");
 	printf("exit\n");
 }
 

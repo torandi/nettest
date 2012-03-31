@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
 		 {"port",    required_argument, 0, 'p' },
 		 {"help",    no_argument,       0, 'h'},
 		 {"client",    required_argument,     0, 'c'},
-		 {"server",    no_argument,      &server, 's'},
+		 {"server",    no_argument,      0, 's'},
 		 {"replier",    no_argument,      &replier, 'r'},
 		 {"verbose",    no_argument,      &verbose_flag, 'v'},
 		 {0, 0, 0, 0}
@@ -35,6 +35,9 @@ int main(int argc, char* argv[]){
 		 case 'p':
 			 network_port = atoi(optarg);
 			 printf("Set port to %i\n", network_port);
+			 break;
+		 case 's':
+			 server = 1;
 			 break;
 		 case 'c':
 			 client = 1;
