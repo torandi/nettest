@@ -79,7 +79,7 @@ void stop_clients() {
 void check_new_connections() {
 	int sockfd = accept_client(sck);
 	if(sockfd != -1) {
-		printf("New client connected: %s\n", getpeer(sockfd).c_str());
+		printf("\nNew client connected: %s\n", getpeer(sockfd).c_str());
 		clients.push_back(sockfd);
 	}
 }
@@ -91,15 +91,19 @@ void *input_handler(void * data) {
 	while(run) {
 
 		if(run_test == -1) {
-			size_t  c;
+			size_t  c=0;
+			int r;
 			printf("nettest(%d clients)>> ", clients.size());
-			getline(&cmd, &c, stdin);
+			r = getline(&cmd,&c, stdin);
 			if(strncmp(cmd, "tcp", 3)==0) {
 				sscanf(cmd, "tcp %d", &num);
 				run_test = num;
 			} else if(strncmp(cmd, "help", 4) == 0) {
 				help();
 			} else if(strncmp(cmd, "exit", 4) == 0) {
+				run = 0;
+			} else if(r == -1) {
+				printf("exit\n");
 				run = 0;
 			} else {
 				printf("Unknown command, run help for help\n");

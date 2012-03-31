@@ -3,6 +3,7 @@
 #include <getopt.h>
 
 #include "server.h"
+#include "client.h"
 #include "socket.h"
 #include "network_lib.h"
 
@@ -12,7 +13,7 @@ void show_usage() {
 
 int main(int argc, char* argv[]){
 	int verbose_flag, network_port=PORT, client=0, server=0, replier=0;
-	std::string replier_hostname;
+	std::string master_hostname;
 	static struct option long_options[] =
 	{
 		 {"port",    required_argument, 0, 'p' },
@@ -44,10 +45,10 @@ int main(int argc, char* argv[]){
 	}
 
 	if ( client && (argc - optind != 1)) {
-		printf("User error!\n");
+		printf("Client mode requires server as argument\n");
 		exit(1);
 	} else if(client) {
-		replier_hostname = std::string(argv[optind++]);
+		master_hostname = std::string(argv[optind++]);
 	}
 
 	if(client && (server || client) && (replier || server) && replier) {
@@ -60,6 +61,6 @@ int main(int argc, char* argv[]){
 	} else if(server) {
 		run_server(network_port, verbose_flag);
 	} else {
-		//run_client(replier_hostname, "",network_port, verbose_flag);
+		run_client(master_hostname, network_port, verbose_flag);
 	}
 }

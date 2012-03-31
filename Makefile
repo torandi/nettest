@@ -1,4 +1,4 @@
-OBJS = sha1.o network_lib.o socket.o protocol.o server.o main.o
+OBJS = sha1.o network_lib.o socket.o protocol.o server.o main.o client.o
 CFLAGS += -Wall -g 
 LDFLAGS += -lpthread
 
