@@ -1,0 +1,18 @@
+A small program for running distrubutes network speedtests.
+
+Usage:
+./nettest --server (-s): Start a server
+./nettest --client server_address (-c): Start a client and connect to server_address
+
+The server controlls the clients.
+Server commands:
+clients: List connected clients
+tcp n: Start tcp test n. 
+	Predefined tests
+		0: 100mb
+		1: 1GB
+		2: 10GB
+	The tests are defined in client.cpp (test_urls[])
+exit: Exit
+
+The clients run the test on command and then returns statistics to the server that summarizes the result after all clients have reported back (or disconnected).
