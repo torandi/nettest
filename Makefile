@@ -1,7 +1,6 @@
-OBJS = client.o client_main.o render.o texture.o resource.o player.o logic.o render_object.o level.o sha1.o network_lib.o socket.o protocol.o server.o
-SPRITES = dispencer.png tail.png
+OBJS = sha1.o network_lib.o socket.o protocol.o server.o main.o
 CFLAGS += -Wall -g 
-#LDFLAGS += 
+LDFLAGS += -lpthread
 
 all: nettest
  
