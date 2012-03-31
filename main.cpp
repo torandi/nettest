@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 	{
 		 {"port",    required_argument, 0, 'p' },
 		 {"help",    no_argument,       0, 'h'},
-		 {"client",    no_argument,      &client, 'c'},
+		 {"client",    required_argument,     0, 'c'},
 		 {"server",    no_argument,      &server, 's'},
 		 {"replier",    no_argument,      &replier, 'r'},
 		 {"verbose",    no_argument,      &verbose_flag, 'v'},
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 	int option_index = 0;
 	int c;
 
-	while( (c=getopt_long(argc, argv, "p:hcsrv", long_options, &option_index)) != -1 ) {
+	while( (c=getopt_long(argc, argv, "p:hc:srv", long_options, &option_index)) != -1 ) {
 	 switch(c) {
 		 case 0:
 			 break;
@@ -36,19 +36,16 @@ int main(int argc, char* argv[]){
 			 network_port = atoi(optarg);
 			 printf("Set port to %i\n", network_port);
 			 break;
+		 case 'c':
+			 client = 1;
+			 master_hostname = std::string(optarg);
+			 break;
 		 case 'h':
 			 show_usage();
 			 exit(0);
 		 default:
 			 break;
 	 }
-	}
-
-	if ( client && (argc - optind != 1)) {
-		printf("Client mode requires server as argument\n");
-		exit(1);
-	} else if(client) {
-		master_hostname = std::string(argv[optind++]);
 	}
 
 	if(client && (server || client) && (replier || server) && replier) {
