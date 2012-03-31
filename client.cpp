@@ -23,7 +23,10 @@ static nw_var_t * vars;
 const char * test_urls[] =  {
 	"http://speedtest.tele2.net/100MB.zip",
 	"http://speedtest.tele2.net/1GB.zip",
-	"http://speedtest.tele2.net/10GB.zip"
+	"http://speedtest.tele2.net/10GB.zip",
+	"http://anycast-mmo.bahnhof.net/100MB.zip",
+	"http://anycast-mmo.bahnhof.net/1GB.zip",
+	"http://anycast-mmo.bahnhof.net/10GB.zip",
 };
 
 void sigterm_client(int sig) {
