@@ -100,7 +100,7 @@ void *input_handler(void * data) {
 		if(run_test == -1) {
 			size_t  c=0;
 			int r;
-			printf("nettest(%d clients)>> ", clients.size());
+			printf("nettest(%zd clients)>> ", clients.size());
 			r = getline(&cmd,&c, stdin);
 			if(strncmp(cmd, "tcp", 3)==0) {
 				sscanf(cmd, "tcp %d", &num);
@@ -189,7 +189,7 @@ void read_all_clients(int in_test) {
 }
 
 void test(int t) {
-	printf("Sending command to run TCP test %d to %d clients\n", t, clients.size());
+	printf("Sending command to run TCP test %d to %zd clients\n", t, clients.size());
 
 	completed_tests = 0;
 	active_clients = clients.size();
